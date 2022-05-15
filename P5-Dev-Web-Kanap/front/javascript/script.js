@@ -12,18 +12,24 @@ fetch('http://localhost:3000/api/products')
         let displayProducts = '<ul style=\'display:flex; font-size:20px; margin:50px 0 0 0; padding:0px; display:flex;\' >';
 
         //Je crée ensuite une boucle pour ajouter chaque produits du tableau dans ma liste, tout en ajustant le style.
+        //Je fais en sorte que mes  produits soit dans des liens afin de rajouter l'identifiant du produit directement à la fin de l'url en faisant :  ?(chaine_de_caracète)
         for (let products of array) {
 
             displayProducts += `
                                     <style> #items {list-style-type: none;} ul {display: flex; gap: 10px; list-style-type: none; margin:0; padding:0;} </style>
 
+                                    <a style=\"display:block; width:100%; \" href="product.html?${products._id}"> 
+                                    
                                     <li style=\' display:flex ; gap:20px; margin:30px 30px; \'>
-                                       <img width=300 height= 300  src='${products.imageUrl}'</img>
+                                       <img width=300 alt='${products.altTxt}' height= 300  src='${products.imageUrl}'</img>
                                        <div>
                                           <h3 style=\" font-size:25px; margin:0px; \"> ${products.name} </h3>
                                           <p style=\"font-size:20px\"> ${products.description} </p> 
                                        </div>
                                     </li>
+
+                                    </a>
+                                    
                                     
                                 `;                                                                 
 
@@ -38,10 +44,10 @@ fetch('http://localhost:3000/api/products')
 
     })
 
-    .catch(function (erreur) { console.log('erreur'); })
-
- // Etape 4 - Faire le lien entre un produit de la page d'accuiel et la page produit.   
+    .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
 
 
-let test = test;
+
+
+
 
