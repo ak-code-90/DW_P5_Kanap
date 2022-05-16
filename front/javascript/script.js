@@ -6,13 +6,16 @@ fetch('http://localhost:3000/api/products')
     .then(function (response) { return response.json(); })
     .then(function (array) {
 
-        console.log(array); // on obtient un tableau avec les différents produits.
+// on obtient un tableau avec les différents produits.        
+        // console.log(array); 
 
-        //Je crée une variable qui va stocker les produits sous forme de liste.
+//Je crée une variable qui va stocker les produits sous forme de liste.
+
         let displayProducts = '<ul style=\'display:flex; font-size:20px; margin:50px 0 0 0; padding:0px; display:flex;\' >';
 
-        //Je crée ensuite une boucle pour ajouter chaque produits du tableau dans ma liste, tout en ajustant le style.
-        // Etape 4 - Je fais en sorte que mes produits soit dans une balise <a> et je rajoute l'identifiant du produit directement à la fin de l'url en faisant :  ?(chaine_de_caracète)
+//Je crée ensuite une boucle pour ajouter chaque produits du tableau dans ma liste, tout en ajustant le style.
+//Je fais en sorte que mes produits soit dans une balise <a> et je rajoute l'identifiant du produit directement à la fin de l'url en faisant :  ?(chaine_de_caracète)
+
         for (let products of array) {
 
             displayProducts += `
@@ -27,24 +30,28 @@ fetch('http://localhost:3000/api/products')
                                           <p style=\"font-size:20px\"> ${products.description} </p> 
                                        </div>
                                     </li>
-
                                     </a>
-                                    
-                                    
                                 `;                                                                 
 
             displayProducts += '</ul>'
         };
 
-        //j'injecte dans la section #items du HTML la variable displayProducts qui permet d'afficher les produits.
+//j'injecte dans la section #items du HTML la variable displayProducts qui permet d'afficher les produits.
+
         let items = document.getElementById('items')
         items.innerHTML = displayProducts;
         items.style.justifyContent = 'unset'
-
-
     })
 
     .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
+
+
+
+
+
+
+  
+
 
 
 
