@@ -92,7 +92,9 @@ fetch(`http://localhost:3000/api/products/${chosenProductId}`)
         }
     }
 
-    .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
+//Pour ce dernier catch je rencontre une erreur dans la console : "catch is not a function"
+//impossible de determiner    
+    // .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
     
 
 
