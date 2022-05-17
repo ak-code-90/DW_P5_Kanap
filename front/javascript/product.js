@@ -28,9 +28,6 @@ let chosenProductId = getIdFromUrl()
 //***********************************************************************************Insertion du produit et de ses détails**************************************************************************************************
 
 
-// difficultés rencontrées : portée des variables, tentatives de console.log avant les réponses de l'API , comprendre comment fonction l'URL, L'API et UrlSearchParams
-
-
 
 //Ajout de l'Id récupéré
 fetch(`http://localhost:3000/api/products/${chosenProductId}`)     
@@ -62,7 +59,6 @@ fetch(`http://localhost:3000/api/products/${chosenProductId}`)
         newColour2.setAttribute('value', `${reponseValue.colors[1]}`);
         newColour2.innerHTML = `${reponseValue.colors[1]}`;
 
-        
 
         //Algoritme qui permet d'afficher autant de choix de couleurs qu'il y a de couleurs dans le tableau de l'objet
         switch (Object.values(reponseValue)[0].length) {
@@ -89,24 +85,10 @@ fetch(`http://localhost:3000/api/products/${chosenProductId}`)
 
             default:
                 break;
+            }
         }
-    }
-
-//Pour ce dernier catch je rencontre une erreur dans la console : "catch is not a function"
-//impossible de determiner    
-    // .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
-    
-
-
-
-)
-
-
-
-
-
-
-
+    )
+    .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
 
 
 
