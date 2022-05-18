@@ -16,12 +16,12 @@ function getIdFromUrl() {
 
 }
 
-let chosenProductId = getIdFromUrl()
+let productId = getIdFromUrl()
 
 // ici j'utilise un console.log avec timeout pour verifier que ma variable globale crée plus haut contient bien la réponse voulu, 
 // si j'utilise directement un console.log j'ai des chances de ne rien pouvoir afficher
 // setTimeout(() => {
-//     console.log(chosenProductId);         
+//     console.log(productId);         
 // }, 1500);
 
 
@@ -30,7 +30,7 @@ let chosenProductId = getIdFromUrl()
 
 
 //Ajout de l'Id récupéré
-fetch(`http://localhost:3000/api/products/${chosenProductId}`)     
+fetch(`http://localhost:3000/api/products/${productId}`)     
 
 
     .then(function (reponse) { return reponse.json(); })
@@ -49,10 +49,14 @@ fetch(`http://localhost:3000/api/products/${chosenProductId}`)
         document.getElementById("description").innerHTML += `${reponseValue.description}`;
 
         //Ajout des options et attributs dans l'élément HTML <select>    
-        document.getElementsByTagName("option")[0].setAttribute('value', `${reponseValue.colors[0]}`);
-        document.getElementsByTagName("option")[0].innerHTML = `${reponseValue.colors[0]}`;
+
 
         let select = document.getElementById("colors");
+
+        let newColour1 = document.createElement("option");
+        select.appendChild(newColour1);
+        newColour1.setAttribute('value', `${reponseValue.colors[0]}`);
+        newColour1.innerHTML = `${reponseValue.colors[0]}`;
 
         let newColour2 = document.createElement("option");
         select.appendChild(newColour2);
@@ -94,12 +98,62 @@ fetch(`http://localhost:3000/api/products/${chosenProductId}`)
 
 
 
+//***********************************************************************************Récupération des choix de l'utilisateur **************************************************************************************************
+
+//Récupération de la couleur dans la liste déroulante
+
+let color;
+
+let selectHTML = document.getElementById('colors');
+
+//On écoute les modifications sur Select, et lors d'un changement on ajoute la valeur sélectionnée à la variable "color" 
+selectHTML.addEventListener( 'change' , function () {
+   return color =  selectHTML.options[selectHTML.selectedIndex].value 
+} )
+
+//Attention ici pour pour afficher le contenenu de la variable
+// il faut attendre la résolution de la promesse et il faut utiliser la console ds les devtools pour simuler un changement de couleur.
+
+// setTimeout(() => {
+//     console.log(color);
+// }, 2000);
+
+   
+//Récupération de la quantité sélectionnée
+
+let qty;
+
+let input = document.getElementById('quantity') ;
+
+input.addEventListener('change', function (event) {
+    
+    if (event.target.value > 100 || event.target.value < 1) {
+         qty = '' ;
+        
+    }
+    else
+    {
+       
+         qty = event.target.value ;
+        
+    }
+    
+}) ;
+
+
+//Envoi les variables 'qty' et 'color' sur le localStorage
+
+let cart = [productId];
+cart.push(qty,color);
 
 
 
+addToCart.onclick = function () {
+    localStorage.setItem('produit', JSON.stringify(cart))
+}
 
 
-
+let cartFromLocalStorage = JSON.parse(localStorage.getItem('produit'))
 
 
 
