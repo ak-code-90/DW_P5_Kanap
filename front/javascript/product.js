@@ -30,7 +30,7 @@ let productId = getIdFromUrl()
 
 
 //Ajout de l'Id récupéré
-fetch(`http://localhost:3000/api/products/${productId}`)     
+fetch(`http://localhost:3000/api/products/${productId}`)
 
 
     .then(function (reponse) { return reponse.json(); })
@@ -89,75 +89,96 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
             default:
                 break;
-            }
         }
+    }
     )
     .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
 
 
 
 
-
 //***********************************************************************************Récupération des choix de l'utilisateur **************************************************************************************************
 
-//Récupération de la couleur dans la liste déroulante
 
-let color;
 
-let selectHTML = document.getElementById('colors');
 
-//On écoute les modifications sur Select, et lors d'un changement on ajoute la valeur sélectionnée à la variable "color" 
-selectHTML.addEventListener( 'change' , function () {
-   return color =  selectHTML.options[selectHTML.selectedIndex].value 
-} )
+// création d'un objet 'product'
+let product = {};
 
-//Attention ici pour pour afficher le contenenu de la variable
-// il faut attendre la résolution de la promesse et il faut utiliser la console ds les devtools pour simuler un changement de couleur.
 
-// setTimeout(() => {
-//     console.log(color);
-// }, 2000);
 
-   
-//Récupération de la quantité sélectionnée
+// lors du clique sur "Ajouter au panier"
+addToCart.onclick = () => {
 
-let qty;
+    //ajout de l'id du produit à l'objet product
+    product.id = productId;
 
-let input = document.getElementById('quantity') ;
+    //Récupération de la couleur choisie qu'on ajoute à l'objet product
 
-input.addEventListener('change', function (event) {
-    
-    if (event.target.value > 100 || event.target.value < 1) {
-         qty = '' ;
-        
+    let colors = document.getElementById('colors');
+    product.colour = colors.options[colors.selectedIndex].value;
+
+    //Récupération de la quantité sélectionnée qu'on ajoute à l'objet oroduct
+
+    if (quantity.value > 100 || quantity.value < 1) {
+        alert('Quantité invalide !');
     }
-    else
-    {
-       
-         qty = event.target.value ;
-        
+    else {
+        product.qty = quantity.value;
+
+    }
+
+    // fonction du panier depuis localStorage
+    function getCart() {
+        if (localStorage.getItem("cart") === null) {            //
+            let cart = [];                                      // --> création du tableau 
+            cart.push(product);                                 // --> ajout du produit au tableau
+            let cartString = JSON.stringify(cart);              // --> sérialisation(stringify) + renvoi du tableau sur le localStorage
+            localStorage.setItem('cart', cartString);
+        }
+        else {
+            cartString = localStorage.getItem('cart');
+            cart = JSON.parse(cartString);
+
+
+
+        }
     }
     
-}) ;
+    // fonction pour envoyer le panier sur le localStorage
+    function sendCart() {
+        cartString = JSON.stringify(cart);
+        localStorage.setItem('cart', cartString); 
+       }
 
 
-//Envoi les variables 'qty' et 'color' sur le localStorage
-
-let cart = [productId];
-cart.push(qty,color);
 
 
+    getCart()
+    let x;
+    let y;
 
-addToCart.onclick = function () {
-    localStorage.setItem('produit', JSON.stringify(cart))
+    function addToCart() {
+        let search = cart.find( element => element.id === product.id && element.colour === product.colour )
+        if (search != undefined) {
+
+           function turnQtyToNumber() {
+                x = parseInt(search.qty) ;
+                y = parseInt(product.qty) ;
+           }
+            turnQtyToNumber()
+            
+           search.qty = x + y 
+           sendCart();
+
+        } else  {
+            cart.push(product);
+            sendCart();  
+        }
+    }
+    addToCart()
+
+
 }
-
-
-let cartFromLocalStorage = JSON.parse(localStorage.getItem('produit'))
-
-
-
-
-
 
 
