@@ -18,8 +18,9 @@ function getIdFromUrl() {
 
 let productId = getIdFromUrl()
 
-// ici j'utilise un console.log avec timeout pour verifier que ma variable globale crée plus haut contient bien la réponse voulu, 
-// si j'utilise directement un console.log j'ai des chances de ne rien pouvoir afficher
+// ici on utilise un console.log avec timeout pour verifier que ma variable globale crée plus haut contient bien la réponse voulue, 
+// si on utilise directement un console.log on a des chances de ne rien pouvoir afficher
+
 // setTimeout(() => {
 //     console.log(productId);         
 // }, 1500);
@@ -107,78 +108,67 @@ let product = {};
 
 
 
-// lors du clique sur "Ajouter au panier"
+// Lors du clique sur "Ajouter au panier"
+// --> Ajout de l'identifiant, de la couleur et de la quantité à l'objet produit
 addToCart.onclick = () => {
 
-    //ajout de l'id du produit à l'objet product
     product.id = productId;
-
-    //Récupération de la couleur choisie qu'on ajoute à l'objet product
 
     let colors = document.getElementById('colors');
     product.colour = colors.options[colors.selectedIndex].value;
-
-    //Récupération de la quantité sélectionnée qu'on ajoute à l'objet oroduct
 
     if (quantity.value > 100 || quantity.value < 1) {
         alert('Quantité invalide !');
     }
     else {
         product.qty = quantity.value;
-
     }
 
-    // fonction du panier depuis localStorage
+    // Création d'une fonction pour récupérer le panier depuis localStorage
     function getCart() {
-        if (localStorage.getItem("cart") === null) {            //
-            let cart = [];                                      // --> création du tableau 
+        if (localStorage.getItem("cart") === null) {            // Si le localStorage est vide
+            let cart = [];                                      // --> création d'un tableau 
             cart.push(product);                                 // --> ajout du produit au tableau
-            let cartString = JSON.stringify(cart);              // --> sérialisation(stringify) + renvoi du tableau sur le localStorage
-            localStorage.setItem('cart', cartString);
+            let cartString = JSON.stringify(cart);              // --> sérialisation du tableau en chaîne de caractères 
+            localStorage.setItem('cart', cartString);           // --> renvoi du tableau sur le localStorage
         }
-        else {
-            cartString = localStorage.getItem('cart');
-            cart = JSON.parse(cartString);
-
-
-
+        else {                                                  // Sinon
+            cartString = localStorage.getItem('cart');          // récupération du tableau depuis le localStorage
+            cart = JSON.parse(cartString);                      // reconstruction de tableau en objet(array)  
         }
     }
     
-    // fonction pour envoyer le panier sur le localStorage
+    // Création d'une fonction pour envoyer le panier sur le localStorage
     function sendCart() {
         cartString = JSON.stringify(cart);
         localStorage.setItem('cart', cartString); 
        }
 
 
-
-
     getCart()
+
+    
     let x;
     let y;
-
+    
+    // Création d'une fonction pour envoyer les produits du panier sur le local Storage
     function addToCart() {
         let search = cart.find( element => element.id === product.id && element.colour === product.colour )
-        if (search != undefined) {
+        if (search != undefined) {            // Si on trouve un objet dans le panier qui a le même id et la même couleur
 
-           function turnQtyToNumber() {
-                x = parseInt(search.qty) ;
-                y = parseInt(product.qty) ;
-           }
-            turnQtyToNumber()
-            
-           search.qty = x + y 
-           sendCart();
+            x = parseInt(search.qty) ;        // --> On actualise sa quantité 
+            y = parseInt(product.qty) ;
+ 
+            search.qty = x + y 
+            sendCart();
 
-        } else  {
-            cart.push(product);
+        } else  {                             // Sinon
+            cart.push(product);               // --> On envoit une nouveau produit dans le panier
             sendCart();  
         }
     }
+
     addToCart()
-
-
 }
 
 
