@@ -28,7 +28,10 @@ let productId = getIdFromUrl()
 
 //***********************************************************************************Insertion du produit et de ses détails**************************************************************************************************
 
-
+let productName = '';
+let productImg = '';
+let productAltText = '';
+let productPrice = '';
 
 //Ajout de l'Id récupéré
 fetch(`http://localhost:3000/api/products/${productId}`)
@@ -42,12 +45,20 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
         //ajout du nom du produit            
         document.getElementById("title").innerHTML += `${reponseValue.name}`;
+        
 
         //ajout du prix            
         document.getElementById("price").innerHTML += `${reponseValue.price}`;
 
         //ajout de la description            
         document.getElementById("description").innerHTML += `${reponseValue.description}`;
+
+        //récupération des éléments à afficher sur la page panier
+        productName = `${reponseValue.name}`;
+        productImg = `${reponseValue.imageUrl}`;
+        productAltText = `${reponseValue.altTxt}`;
+        productPrice = `${reponseValue.price}`;
+        
 
         //Ajout des options et attributs dans l'élément HTML <select>    
 
@@ -109,10 +120,14 @@ let product = {};
 
 
 // Lors du clique sur "Ajouter au panier"
-// --> Ajout de l'identifiant, de la couleur et de la quantité à l'objet produit
+// --> Ajout des informations à envoyer sur le localStorage
 addToCart.onclick = () => {
 
     product.id = productId;
+    product.name = productName;
+    product.img = productImg;
+    product.altTxt = productAltText;
+    product.price = productPrice;
 
     let colors = document.getElementById('colors');
     product.colour = colors.options[colors.selectedIndex].value;
