@@ -45,7 +45,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
         //ajout du nom du produit            
         document.getElementById("title").innerHTML += `${reponseValue.name}`;
-        
+
 
         //ajout du prix            
         document.getElementById("price").innerHTML += `${reponseValue.price}`;
@@ -58,7 +58,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
         productImg = `${reponseValue.imageUrl}`;
         productAltText = `${reponseValue.altTxt}`;
         productPrice = `${reponseValue.price}`;
-        
+
 
         //Ajout des options et attributs dans l'élément HTML <select>    
 
@@ -125,66 +125,77 @@ addToCart.onclick = () => {
 
     let colors = document.getElementById('colors');
     product.colour = colors.options[colors.selectedIndex].value;
-
-    if (quantity.value > 100 || quantity.value < 1) {
+    
+    if (quantity.value > 100 || quantity.value < 1) {             // gestion des exceptions
         alert('Quantité invalide !');
     }
+    else if (product.colour == '') {
+        alert('Veuillez choisir une couleur');
+    }
     else {
-        product.qty = quantity.value;
+
+        product.qty = Number(quantity.value);                     // Remplissage de l'objet product avec les informations nécessaires pour la page panier
+        product.id = productId;
+        product.name = productName;
+        product.img = productImg;
+        product.altTxt = productAltText;
+        product.price = Number(productPrice) * product.qty;
+        product.defaultPrice = Number(productPrice);
+
+        if (product.qty>1) {
+            alert('Vos articles ont bien été ajouté au panier')    // Affichage d'un message de confirmation d'ajout au panier
+        }
+        else { alert('Votre article a bien été ajouté au panier')}
+
+
+        // Création d'une fonction pour récupérer le panier depuis localStorage
+        function getCart() {
+            if (localStorage.getItem("cart") === null) {            // Si le localStorage est vide
+                let cart = [];                                      // --> création d'un tableau 
+                cart.push(product);                                 // --> ajout du produit au tableau
+                let cartString = JSON.stringify(cart);              // --> sérialisation du tableau en chaîne de caractères 
+                localStorage.setItem('cart', cartString);           // --> renvoi du tableau sur le localStorage
+            }
+            else {                                                  // Sinon
+                cartString = localStorage.getItem('cart');          // récupération du tableau depuis le localStorage
+                cart = JSON.parse(cartString);                      // reconstruction de tableau en objet(array)  
+            }
+        }
+
+        // Création d'une fonction pour envoyer le panier sur le localStorage
+        function sendCart() {
+            cartString = JSON.stringify(cart);
+            localStorage.setItem('cart', cartString);
+        }
+
+
+        getCart();
+
+        // Création d'une fonction pour envoyer les produits du panier sur le local Storage
+
+        let x;
+        let y;
+        function addToCart() {
+            let search = cart.find(element => element.id === product.id && element.colour === product.colour)
+            if (search != undefined) {            // Si on trouve un objet dans le panier qui a le même id et la même couleur
+
+                x = parseInt(search.qty);        // --> On actualise sa quantité 
+                y = parseInt(product.qty);
+
+                search.qty = x + y ;
+                sendCart();
+                
+
+            }
+            else {                              // Sinon
+                cart.push(product);             // --> On envoit une nouveau produit dans le panier
+                sendCart();
+                
+            }
+        }
+
+        addToCart() ;
+        
     }
 
-    product.id = productId;
-    product.name = productName;
-    product.img = productImg;
-    product.altTxt = productAltText;
-    product.price = productPrice;
-    
-
-    // Création d'une fonction pour récupérer le panier depuis localStorage
-    function getCart() {
-        if (localStorage.getItem("cart") === null) {            // Si le localStorage est vide
-            let cart = [];                                      // --> création d'un tableau 
-            cart.push(product);                                 // --> ajout du produit au tableau
-            let cartString = JSON.stringify(cart);              // --> sérialisation du tableau en chaîne de caractères 
-            localStorage.setItem('cart', cartString);           // --> renvoi du tableau sur le localStorage
-        }
-        else {                                                  // Sinon
-            cartString = localStorage.getItem('cart');          // récupération du tableau depuis le localStorage
-            cart = JSON.parse(cartString);                      // reconstruction de tableau en objet(array)  
-        }
-    }
-    
-    // Création d'une fonction pour envoyer le panier sur le localStorage
-    function sendCart() {
-        cartString = JSON.stringify(cart);
-        localStorage.setItem('cart', cartString); 
-       }
-
-
-    getCart()
-
-    
-    let x;
-    let y;
-    
-    // Création d'une fonction pour envoyer les produits du panier sur le local Storage
-    function addToCart() {
-        let search = cart.find( element => element.id === product.id && element.colour === product.colour )
-        if (search != undefined) {            // Si on trouve un objet dans le panier qui a le même id et la même couleur
-
-            x = parseInt(search.qty) ;        // --> On actualise sa quantité 
-            y = parseInt(product.qty) ;
- 
-            search.qty = x + y 
-            sendCart();
-
-        } else  {                             // Sinon
-            cart.push(product);               // --> On envoit une nouveau produit dans le panier
-            sendCart();  
-        }
-    }
-
-    addToCart()
 }
-
-

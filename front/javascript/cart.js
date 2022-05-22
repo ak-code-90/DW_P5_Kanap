@@ -56,15 +56,6 @@ for (let e of cart) {
     let x = parseInt(e.qty);
     let y = parseInt(e.price);
 
-    inputQty.addEventListener('change', function () {
-        
-        console.log(typeof x);
-        
-        if (x++) {
-            priceHTML.innerHTML = 'Prix : ' + (y + 200000) + '€' ;
-            
-            y = 10003 ;
-        }
-        else if (x--) {priceHTML.innerHTML = 'Prix : ' + (y = 0) + '€' ;}
-    })
+    
     }
+    
