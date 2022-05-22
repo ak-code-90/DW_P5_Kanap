@@ -123,12 +123,6 @@ let product = {};
 // --> Ajout des informations à envoyer sur le localStorage
 addToCart.onclick = () => {
 
-    product.id = productId;
-    product.name = productName;
-    product.img = productImg;
-    product.altTxt = productAltText;
-    product.price = productPrice;
-
     let colors = document.getElementById('colors');
     product.colour = colors.options[colors.selectedIndex].value;
 
@@ -138,6 +132,13 @@ addToCart.onclick = () => {
     else {
         product.qty = quantity.value;
     }
+
+    product.id = productId;
+    product.name = productName;
+    product.img = productImg;
+    product.altTxt = productAltText;
+    product.price = productPrice;
+    
 
     // Création d'une fonction pour récupérer le panier depuis localStorage
     function getCart() {

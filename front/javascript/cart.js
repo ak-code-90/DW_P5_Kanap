@@ -20,7 +20,7 @@ for (let element of cart) {
                         <div class="cart__item__content__description">
                                 <h2>${element.name}</h2>
                                 <p>Couleur : ${element.colour}</p>
-                                <p>Prix : ${element.price} €</p>
+                                <p id="price">Prix : ${element.price*element.qty} €</p>
                         </div>
                         <div class="cart__item__content__settings">
                                 <div class="cart__item__content__settings__quantity">
@@ -43,4 +43,28 @@ for (let element of cart) {
 
 // Modification ou suppression d'un produit depuis la page panier
 
+// écouter l'input et si il y a un changement, modifier le prix afficher et changer la quantité actualisée ou supprimer le produit si ça quantité atteint zero
 
+
+
+let priceHTML = document.querySelector('#price')
+let inputQty = document.querySelector('.itemQuantity')
+
+
+for (let e of cart) {
+    console.log(e.price);
+    let x = parseInt(e.qty);
+    let y = parseInt(e.price);
+
+    inputQty.addEventListener('change', function () {
+        
+        console.log(typeof x);
+        
+        if (x++) {
+            priceHTML.innerHTML = 'Prix : ' + (y + 200000) + '€' ;
+            
+            y = 10003 ;
+        }
+        else if (x--) {priceHTML.innerHTML = 'Prix : ' + (y = 0) + '€' ;}
+    })
+    }
