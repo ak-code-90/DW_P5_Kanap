@@ -143,7 +143,7 @@ addToCart.onclick = () => {
         product.defaultPrice = Number(productPrice);
 
         if (product.qty>1) {
-            alert('Vos articles ont bien été ajouté au panier')    // Affichage d'un message de confirmation d'ajout au panier
+            alert('Vos articles ont bien été ajoutés au panier')    // Affichage d'un message de confirmation d'ajout au panier
         }
         else { alert('Votre article a bien été ajouté au panier')}
 
