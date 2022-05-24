@@ -122,7 +122,7 @@ let product = {};
 // Lors du clique sur "Ajouter au panier"
 // --> Ajout des informations à envoyer sur le localStorage
 addToCart.onclick = () => {
-
+    
     let colors = document.getElementById('colors');
     product.colour = colors.options[colors.selectedIndex].value;
     
@@ -133,7 +133,7 @@ addToCart.onclick = () => {
         alert('Veuillez choisir une couleur');
     }
     else {
-
+        
         product.qty = Number(quantity.value);                     // Remplissage de l'objet product avec les informations nécessaires pour la page panier
         product.id = productId;
         product.name = productName;
@@ -150,11 +150,13 @@ addToCart.onclick = () => {
 
         // Création d'une fonction pour récupérer le panier depuis localStorage
         function getCart() {
+
             if (localStorage.getItem("cart") === null) {            // Si le localStorage est vide
                 let cart = [];                                      // --> création d'un tableau 
                 cart.push(product);                                 // --> ajout du produit au tableau
                 let cartString = JSON.stringify(cart);              // --> sérialisation du tableau en chaîne de caractères 
                 localStorage.setItem('cart', cartString);           // --> renvoi du tableau sur le localStorage
+                console.log(cart);
             }
             else {                                                  // Sinon
                 cartString = localStorage.getItem('cart');          // récupération du tableau depuis le localStorage
@@ -163,8 +165,8 @@ addToCart.onclick = () => {
         }
 
         // Création d'une fonction pour envoyer le panier sur le localStorage
-        function sendCart() {
-            cartString = JSON.stringify(cart);
+        function sendCart(array) {
+            cartString = JSON.stringify(array);
             localStorage.setItem('cart', cartString);
         }
 
@@ -183,13 +185,14 @@ addToCart.onclick = () => {
                 y = parseInt(product.qty);
 
                 search.qty = x + y ;
-                sendCart();
+                search.price = search.defaultPrice * search.qty ;
+                sendCart(cart);
                 
 
             }
             else {                              // Sinon
                 cart.push(product);             // --> On envoit une nouveau produit dans le panier
-                sendCart();
+                sendCart(cart);
                 
             }
         }
@@ -197,5 +200,5 @@ addToCart.onclick = () => {
         addToCart() ;
         
     }
-
+    
 }
