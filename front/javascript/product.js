@@ -139,8 +139,8 @@ addToCart.onclick = () => {
         product.name = productName;
         product.img = productImg;
         product.altTxt = productAltText;
-        product.price = Number(productPrice) * product.qty;
-        product.defaultPrice = Number(productPrice);
+        // product.price = Number(productPrice) * product.qty;
+        // product.defaultPrice = Number(productPrice);
 
         if (product.qty>1) {
             alert('Vos articles ont bien été ajoutés au panier')    // Affichage d'un message de confirmation d'ajout au panier
