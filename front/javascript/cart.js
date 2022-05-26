@@ -10,8 +10,8 @@ fetch('http://localhost:3000/api/products')
 
         // Récupération du Panier depuis le localStorage
 
-        let cartSTring = localStorage.getItem('cart');     
-        cart = JSON.parse(cartSTring);                      
+        let cartSTring = localStorage.getItem('cart');
+        cart = JSON.parse(cartSTring);
 
         // function qui sauvegarde le panier ds localStorage
         function sendCart(array) {
@@ -30,10 +30,10 @@ fetch('http://localhost:3000/api/products')
         for (let element of cart) {
 
 
-            object = apiArray.find(obj => obj._id === element.id) ;       
+            object = apiArray.find(obj => obj._id === element.id);
             // récupération dans l'API d'un objet dont l'ID matche avec l'ID de l'élément du panier, 
             // le but est de pouvoir calculer le prix de chq élément grâce aux prix par default ds l'API (ligne 57).
-                                                                          
+
 
 
 
@@ -69,25 +69,25 @@ fetch('http://localhost:3000/api/products')
                             </div>
             `
 
-            
-            
+
+
             totalP += object.price * element.qty;               // Calcul des totaux à afficher
-            totalQ += element.qty;  
-            
+            totalQ += element.qty;
+
 
 
         }
         //-------------------------------------------------------------------Gestion de la suppresion d'un produit------------------------------------------------------------------------------------------
 
-        
 
-        let deleteHTML = document.getElementsByClassName('deleteItem');              
+
+        let deleteHTML = document.getElementsByClassName('deleteItem');
         let search = '';
 
 
         for (const e of deleteHTML) {                                          // pour chaque élément de la collection de boutons "supprimer" 
             e.addEventListener('click', function () {                           // et à chaque clique sur "supprimer"..
-                
+
                 let closestArticleID = e.closest('#article').dataset.id;           // closestArticleID fait réfécence à l'id du parent <article> du bouton "supprimer" cliqué 
                 let closestArticleColor = e.closest('#article').dataset.color;      // closestArticleColor fait réfécence à la couleur du parent <article> du bouton "supprimer" cliqué 
                 let closestArticle = e.closest('#article');                         // closestArticle fait réfécence au parent <article>
@@ -129,7 +129,7 @@ fetch('http://localhost:3000/api/products')
 
 
 
-                let searchResult = cart.find(element => element.id === closestArticleID && element.colour === closestArticleColor); 
+                let searchResult = cart.find(element => element.id === closestArticleID && element.colour === closestArticleColor);
                 // On réccupère un objet dans le panier qui a le même id et la même couleur que le produit sur lequel l'input a été modifié
 
                 if (searchResult != undefined && e.value > 0) {
@@ -142,8 +142,8 @@ fetch('http://localhost:3000/api/products')
                         return arr.filter(item => item === el)           // ce qui à pour effet de changer l'affichage dans le DOM
                     }
 
-                    changeArrayElValue(cart, searchResult.qty);  
-                    
+                    changeArrayElValue(cart, searchResult.qty);
+
 
                     sendCart(cart);                                                               // On envoit le nouveau panier qui remplacera le précédent sur le localStorage
                     // location.reload();                                                            // et on recharge la page pour afficher le résultat.
@@ -160,9 +160,74 @@ fetch('http://localhost:3000/api/products')
 
         totalQuantity.innerHTML = `${totalQ}`;                            // on modifie l'affichage des totaux dans le DOM
         totalPrice.innerHTML = `${totalP}`;
-
-        
-        
-
     }
-)
+    )
+
+
+
+
+
+
+//-------------------------------------------------------------------------Validation des données utilisateur---------------------------------------------------------------------------------------------
+
+
+// LE PRENOM
+
+let fNameEntered = '';
+
+function validation(regex,inputEntered,idErrorMsg,errorMsg) {                         // création de la fonction de validation des donnée
+    if (regex.test(inputEntered) !== true) {                                          // si le test regex retourne 'False', afficher le message d'erreur
+        document.getElementById(`${idErrorMsg}`).innerHTML = `${errorMsg}`; 
+    }
+}
+
+firstName.addEventListener('change', function () {                                    // écoute d'un changement sur l'input
+                                        
+    fNameEntered = firstName.value;
+  
+    validation(/rosaire|kevin/i,fNameEntered,'firstNameErrorMsg','Prénom invalide !');
+})
+
+
+// LE NOM
+
+let lastNameEntered = '';
+
+lastName.addEventListener('change', function () {  
+
+    lastNameEntered = lastName.value;
+
+    validation(/le|adda/i,lastNameEntered,'lastNameErrorMsg','Nom invalide !');
+})
+
+
+// L'ADRESSE
+
+
+let addressEntered = '';
+
+address.addEventListener('change', function () {                     
+    addressEntered = address.value;
+
+    validation(/rue|bd/i,addressEntered,'addressErrorMsg','Adresse invalide !');
+})
+
+// LA VILLE
+
+let cityEntered = '';
+
+city.addEventListener('change', function () {                     
+    cityEntered = city.value;
+
+    validation(/paris|courbevoie/i,cityEntered,'cityErrorMsg','Ville invalide !');
+})
+
+// L'EMAIL
+
+let emailEntered = '';
+
+email.addEventListener('change', function () {                     
+    emailEntered = email.value;
+
+    validation(/gmail|hotmail/i,emailEntered,'emailErrorMsg','Email invalide !');
+})
