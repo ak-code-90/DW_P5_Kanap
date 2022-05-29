@@ -10,8 +10,8 @@ fetch('http://localhost:3000/api/products')
 
         // Récupération du Panier depuis le localStorage
 
-        let cartSTring = localStorage.getItem('cart');
-        cart = JSON.parse(cartSTring);
+        let cartString = localStorage.getItem('cart');
+        let cart = JSON.parse(cartString);
 
         // function qui sauvegarde le panier ds localStorage
         function sendCart(array) {
@@ -31,8 +31,9 @@ fetch('http://localhost:3000/api/products')
 
 
             object = apiArray.find(obj => obj._id === element.id);
+
             // récupération dans l'API d'un objet dont l'ID matche avec l'ID de l'élément du panier, 
-            // le but est de pouvoir calculer le prix de chq élément grâce aux prix par default ds l'API (ligne 57).
+            // le but est de pouvoir calculer le prix de chq élément grâce aux prix par default dans l'API (ligne 57).
 
 
 
@@ -146,7 +147,7 @@ fetch('http://localhost:3000/api/products')
 
 
                     sendCart(cart);                                                               // On envoit le nouveau panier qui remplacera le précédent sur le localStorage
-                    // location.reload();                                                            // et on recharge la page pour afficher le résultat.
+                    location.reload();                                                            // et on recharge la page pour afficher le résultat.
 
 
                 }
@@ -171,21 +172,45 @@ fetch('http://localhost:3000/api/products')
 //-------------------------------------------------------------------------Validation des données utilisateur---------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
+let resultFname = '';
+let resultLname = '';
+let resultAddress = '';
+let resultCity = '';
+let resultEmail = '';
+
+function resultTestRegex(regex, inputEntered) {                            // fonction qui retourne le resultat du test RegExpr
+    if (regex.test(inputEntered) == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function displayErrorMsg(regex, inputEntered, idErrorMsg, errorMsg,) {             // fonction qui affiche un message d'erreur si le test RegExpr retourne 'False'
+    if (regex.test(inputEntered) !== true) {                                          // si le test regex retourne 'False', afficher le message d'erreur
+        document.getElementById(`${idErrorMsg}`).innerHTML = `${errorMsg}`;           // si le test retourne 'True', ne rien afficher
+
+    } else { document.getElementById(`${idErrorMsg}`).innerHTML = ``; }
+
+}
+
+
+
+
+
 // LE PRENOM
 
 let fNameEntered = '';
 
-function validation(regex,inputEntered,idErrorMsg,errorMsg) {                         // création de la fonction de validation des donnée
-    if (regex.test(inputEntered) !== true) {                                          // si le test regex retourne 'False', afficher le message d'erreur
-        document.getElementById(`${idErrorMsg}`).innerHTML = `${errorMsg}`; 
-    }
-}
-
-firstName.addEventListener('change', function () {                                    // écoute d'un changement sur l'input
-                                        
+firstName.addEventListener('change', function () {                                      // écoute d'un changement sur l'input
     fNameEntered = firstName.value;
-  
-    validation(/rosaire|kevin/i,fNameEntered,'firstNameErrorMsg','Prénom invalide !');
+    resultFname = resultTestRegex(/^(?=.{1,13}$)[a-z é è ê ï ô '-]*$/i, fNameEntered); console.log(resultFname);                          // on stock le résultat du test RegExpr
+    displayErrorMsg(/^(?=.{1,13}$)[a-z é è ê ï '-]*$/i, fNameEntered, 'firstNameErrorMsg', 'Prénom invalide !');
 })
 
 
@@ -193,11 +218,11 @@ firstName.addEventListener('change', function () {                              
 
 let lastNameEntered = '';
 
-lastName.addEventListener('change', function () {  
+lastName.addEventListener('change', function () {
 
     lastNameEntered = lastName.value;
-
-    validation(/le|adda/i,lastNameEntered,'lastNameErrorMsg','Nom invalide !');
+    resultLname = resultTestRegex(/^(?=.{1,300}$)[a-z é è ê ï ô '-]*$/i, lastNameEntered);
+    displayErrorMsg(/^(?=.{1,13}$)[a-z é è ê ï '-]*$/i, lastNameEntered, 'lastNameErrorMsg', 'Nom invalide !');
 })
 
 
@@ -206,28 +231,88 @@ lastName.addEventListener('change', function () {
 
 let addressEntered = '';
 
-address.addEventListener('change', function () {                     
+address.addEventListener('change', function () {
     addressEntered = address.value;
-
-    validation(/rue|bd/i,addressEntered,'addressErrorMsg','Adresse invalide !');
+    resultAddress = resultTestRegex(/^(?=.{1,300}$)[a-z 0-9 é è ê ï ô , ° '-]*$/i, addressEntered);
+    displayErrorMsg(/^(?=.{1,300}$)[a-z 0-9 é è ê ï ô , ° '-]*$/i, addressEntered, 'addressErrorMsg', 'Adresse invalide !');
 })
 
 // LA VILLE
 
 let cityEntered = '';
 
-city.addEventListener('change', function () {                     
+city.addEventListener('change', function () {
     cityEntered = city.value;
-
-    validation(/paris|courbevoie/i,cityEntered,'cityErrorMsg','Ville invalide !');
+    resultCity = resultTestRegex(/^(?=.{1,46}$)[a-z 0-9 é è ê ï ô ° '-]*$/i, cityEntered);
+    displayErrorMsg(/^(?=.{1,46}$)[a-z 0-9 â é è ê ï ô ° '-]*$/i, cityEntered, 'cityErrorMsg', 'Ville invalide !');
 })
 
 // L'EMAIL
 
 let emailEntered = '';
 
-email.addEventListener('change', function () {                     
+email.addEventListener('change', function () {
     emailEntered = email.value;
-
-    validation(/gmail|hotmail/i,emailEntered,'emailErrorMsg','Email invalide !');
+    resultEmail = resultTestRegex(/^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/i, emailEntered);
+    displayErrorMsg(/^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/ig, emailEntered, 'emailErrorMsg', 'Email invalide !');
 })
+
+
+const contact = {};
+
+let cartSTring = localStorage.getItem('cart');               // récupération du panier
+let cart = JSON.parse(cartSTring);
+
+
+const products = [];                                          // création d'un tableau avec les id de chaque produit du panier
+for (const e of cart) {
+    products.push(e.id);
+
+}
+
+
+
+
+
+let form = document.querySelector('.cart__order__form');
+
+form.addEventListener('submit', function (event) {                  // lors du clique sur 'commander' si le test est validé, on crée l'objet contact et on l'envoi
+
+
+    event.preventDefault();                                             // empêche le comportement par défault du bouton soi l'envoi du formulaire lors du click
+
+    if (resultFname && resultLname && resultAddress && resultCity && resultEmail) {
+
+        contact.firstName = fNameEntered;
+        contact.lastName = lastNameEntered;
+        contact.address = addressEntered;
+        contact.city = cityEntered;
+        contact.email = emailEntered;
+        
+        
+        const order = {contact , products}                         // création d'un objet order, ayant les propriétés contact et products 
+        
+
+
+        fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(order)
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (value) {
+                
+                document.location.href= `confirmation.html?order=${value.orderId}`
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+    }
+})
+
+
+
