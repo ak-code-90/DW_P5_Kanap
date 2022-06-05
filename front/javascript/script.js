@@ -1,46 +1,43 @@
  // Etape 3 - Inserer les produits dans la page d'accueil 
 
-// Je récupère les produits en utilisant la methode FETCH, J'utilise .THEN pour attendre et recupérer une reponse en JSON, et je vais ensuite afficher la réponse dans la console pour m'assurer que ça fonctionne.
+// Récupération des produits en utilisant la méthode FETCH, on utilise .THEN pour attendre et recupérer une reponse en JSON, 
+// 
 fetch('http://localhost:3000/api/products')
 
     .then(function (response) { return response.json(); })
     .then(function (array) {
+ 
+ // on obtient un tableau avec les différents produits.        
+         
 
-// on obtient un tableau avec les différents produits.        
-        // console.log(array); 
+//Création d'une variable qui va stocker la façon dont chaque élément doit s'afficher
 
-//Je crée une variable qui va stocker les produits sous forme de liste.
+        let displayProducts = '';
 
-        let displayProducts = '<ul style=\'display:flex; font-size:20px; margin:50px 0 0 0; padding:0px; display:flex;\' >';
-
-//Je crée ensuite une boucle pour ajouter chaque produits du tableau dans ma liste, tout en ajustant le style.
-//Je fais en sorte que mes produits soit dans une balise <a> et je rajoute l'identifiant du produit directement à la fin de l'url en faisant :  ?(chaine_de_caracète)
+//Création d'une boucle pour ajouter chaque produits.
+//On utilise des liens dans lesquels on rajoute l'identifiant de chaque produit en paramètre de l'url 
 
         for (let products of array) {
 
             displayProducts += `
-                                    <style> #items {list-style-type: none;} ul {display: flex; gap: 10px; list-style-type: none; padding:0;} </style>
 
-                                    <a style=\"display:block; width:100%; \" href="product.html?_id=${products._id}"> 
-                                    
-                                    <li style=\' display:flex ; gap:20px; margin:30px 30px; \'>
+                                    <a href="product.html?id=${products._id}"> 
+                                    <div style=\'list-style-type:none \'>
                                        <img lazy=loading width=300 alt='${products.altTxt}' height= 300  src='${products.imageUrl}'</img>
                                        <div>
-                                          <h3 style=\" font-size:25px; margin:0px; \"> ${products.name} </h3>
-                                          <p style=\"font-size:20px\"> ${products.description} </p> 
+                                          <h3> ${products.name} </h3>
+                                          <p>  ${products.description} </p> 
                                        </div>
-                                    </li>
+                                    </div>
                                     </a>
                                 `;                                                                 
-
-            displayProducts += '</ul>'
         };
 
-//j'injecte dans la section #items du HTML la variable displayProducts qui permet d'afficher les produits.
+//On modifie le DOM pour afficher tous les produits
 
         let items = document.getElementById('items')
         items.innerHTML = displayProducts;
-        items.style.justifyContent = 'unset'
+        
     })
 
     .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })

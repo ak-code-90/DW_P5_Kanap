@@ -1,3 +1,16 @@
+let cartString;
+let cart;
+
+function getCart() {
+    cartString = localStorage.getItem('cart');
+    cart = JSON.parse(cartString);  
+}
+
+function sendCart(array) {
+    cartString = JSON.stringify(array);
+    localStorage.setItem('cart', cartString);
+}
+
 // Récupération du tableau de l'API
 
 fetch('http://localhost:3000/api/products')
@@ -6,19 +19,9 @@ fetch('http://localhost:3000/api/products')
         let apiArray = array
 
 
-
-
         // Récupération du Panier depuis le localStorage
 
-        let cartString = localStorage.getItem('cart');
-        let cart = JSON.parse(cartString);
-
-        // function qui sauvegarde le panier ds localStorage
-        function sendCart(array) {
-            cartString = JSON.stringify(array);
-            localStorage.setItem('cart', cartString);
-        }
-
+        getCart();
 
         //-------------------------------------------------------------------Gestion de l'affichage des produits du panier'------------------------------------------------------------------------------------------
 
@@ -35,9 +38,6 @@ fetch('http://localhost:3000/api/products')
             // récupération dans l'API d'un objet dont l'ID matche avec l'ID de l'élément du panier, 
             // le but est de pouvoir calculer le prix de chq élément grâce aux prix par default dans l'API (ligne 57).
 
-
-
-
             const sectionHTML = document.getElementById('cart__items');
             let articleHTML = document.createElement('article');
             sectionHTML.appendChild(articleHTML);
@@ -45,8 +45,6 @@ fetch('http://localhost:3000/api/products')
             articleHTML.setAttribute('id', 'article');
             articleHTML.setAttribute('data-id', `${element.id}`);
             articleHTML.setAttribute('data-color', `${element.colour}`);
-
-
 
             articleHTML.innerHTML = `
                             <div class="cart__item__img">
@@ -70,21 +68,18 @@ fetch('http://localhost:3000/api/products')
                             </div>
             `
 
-
-
             totalP += object.price * element.qty;               // Calcul des totaux à afficher
             totalQ += element.qty;
-
-
-
         }
-        //-------------------------------------------------------------------Gestion de la suppresion d'un produit------------------------------------------------------------------------------------------
 
+        totalQuantity.innerHTML = `${totalQ}`;                            // affichage des totaux dans le DOM
+        totalPrice.innerHTML = `${totalP}`;
+
+        //-------------------------------------------------------------------Gestion de la suppresion d'un produit------------------------------------------------------------------------------------------
 
 
         let deleteHTML = document.getElementsByClassName('deleteItem');
         let search = '';
-
 
         for (const e of deleteHTML) {                                          // pour chaque élément de la collection de boutons "supprimer" 
             e.addEventListener('click', function () {                           // et à chaque clique sur "supprimer"..
@@ -155,12 +150,8 @@ fetch('http://localhost:3000/api/products')
             })
         }
 
-
-        //-----------------------------------------------------------------Affichage de la quantité et du prix total------------------------------------------------------------------------------------------
-
-
-        totalQuantity.innerHTML = `${totalQ}`;                            // on modifie l'affichage des totaux dans le DOM
-        totalPrice.innerHTML = `${totalP}`;
+      
+        
     }
     )
 
@@ -169,21 +160,10 @@ fetch('http://localhost:3000/api/products')
 
 
 
-//-------------------------------------------------------------------------Validation des données utilisateur---------------------------------------------------------------------------------------------
+//------------------------------------------------------------Validation des données utilisateur---------------------------------------------------------------------------------------------
 
 
-
-
-
-
-
-let resultFname = '';
-let resultLname = '';
-let resultAddress = '';
-let resultCity = '';
-let resultEmail = '';
-
-function resultTestRegex(regex, inputEntered) {                            // fonction qui retourne le resultat du test RegExpr
+function resultTestRegex(regex, inputEntered) {                                   // fonction qui retourne le resultat du test RegExpr
     if (regex.test(inputEntered) == true) {
         return true;
     } else {
@@ -199,6 +179,10 @@ function displayErrorMsg(regex, inputEntered, idErrorMsg, errorMsg,) {          
 
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 
@@ -206,50 +190,54 @@ function displayErrorMsg(regex, inputEntered, idErrorMsg, errorMsg,) {          
 // LE PRENOM
 
 let fNameEntered = '';
+let resultFname = '';
 
-firstName.addEventListener('change', function () {                                      // écoute d'un changement sur l'input
+firstName.addEventListener('change', function () {                                                                  // écoute d'un changement sur l'input
     fNameEntered = firstName.value;
-    resultFname = resultTestRegex(/^(?=.{1,13}$)[a-z é è ê ï ô '-]*$/i, fNameEntered); console.log(resultFname);                          // on stock le résultat du test RegExpr
-    displayErrorMsg(/^(?=.{1,13}$)[a-z é è ê ï '-]*$/i, fNameEntered, 'firstNameErrorMsg', 'Prénom invalide !');
+    resultFname = resultTestRegex(/^(?=.{2,13})[a-z é è ê ï ô '-]*$/i, fNameEntered);                              // on stock le résultat du test RegExpr
+    displayErrorMsg(/^(?=.{2,13})[a-z é è ê ï '-]*$/i, fNameEntered, 'firstNameErrorMsg', 'Prénom invalide !');    // affichage du mssg d'erreur
 })
 
 
 // LE NOM
 
 let lastNameEntered = '';
+let resultLname = '';
 
 lastName.addEventListener('change', function () {
 
     lastNameEntered = lastName.value;
-    resultLname = resultTestRegex(/^(?=.{1,300}$)[a-z é è ê ï ô '-]*$/i, lastNameEntered);
-    displayErrorMsg(/^(?=.{1,13}$)[a-z é è ê ï '-]*$/i, lastNameEntered, 'lastNameErrorMsg', 'Nom invalide !');
+    resultLname = resultTestRegex(/^(?=.{2,300})[a-z é è ê ï ô '-]*$/i, lastNameEntered);
+    displayErrorMsg(/^(?=.{2,13})[a-z é è ê ï '-]*$/i, lastNameEntered, 'lastNameErrorMsg', 'Nom invalide !');
 })
 
 
 // L'ADRESSE
 
-
 let addressEntered = '';
+let resultAddress = '';
 
 address.addEventListener('change', function () {
     addressEntered = address.value;
-    resultAddress = resultTestRegex(/^(?=.{1,300}$)[a-z 0-9 é è ê ï ô , ° '-]*$/i, addressEntered);
-    displayErrorMsg(/^(?=.{1,300}$)[a-z 0-9 é è ê ï ô , ° '-]*$/i, addressEntered, 'addressErrorMsg', 'Adresse invalide !');
+    resultAddress = resultTestRegex(/^(?=.{5,300})[a-z 0-9 â é è ê î ï ô , ° '-]*$/i, addressEntered);
+    displayErrorMsg(/^(?=.{5,300})[a-z 0-9 â é è ê î ï ô , ° '-]*$/i, addressEntered, 'addressErrorMsg', 'Adresse invalide !');
 })
 
 // LA VILLE
 
 let cityEntered = '';
+let resultCity = '';
 
 city.addEventListener('change', function () {
     cityEntered = city.value;
-    resultCity = resultTestRegex(/^(?=.{1,46}$)[a-z 0-9 é è ê ï ô ° '-]*$/i, cityEntered);
-    displayErrorMsg(/^(?=.{1,46}$)[a-z 0-9 â é è ê ï ô ° '-]*$/i, cityEntered, 'cityErrorMsg', 'Ville invalide !');
+    resultCity = resultTestRegex(/^(?=.{1,46})[a-z 0-9 é è ê ï ô ° '-]*$/i, cityEntered);
+    displayErrorMsg(/^(?=.{1,46})[a-z 0-9 â é è ê ï ô ° '-]*$/i, cityEntered, 'cityErrorMsg', 'Ville invalide !');
 })
 
 // L'EMAIL
 
 let emailEntered = '';
+let resultEmail = '';
 
 email.addEventListener('change', function () {
     emailEntered = email.value;
@@ -258,21 +246,15 @@ email.addEventListener('change', function () {
 })
 
 
-const contact = {};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-let cartSTring = localStorage.getItem('cart');               // récupération du panier
-let cart = JSON.parse(cartSTring);
-
+getCart();
 
 const products = [];                                          // création d'un tableau avec les id de chaque produit du panier
+
 for (const e of cart) {
     products.push(e.id);
-
 }
-
-
-
-
 
 let form = document.querySelector('.cart__order__form');
 
@@ -283,16 +265,14 @@ form.addEventListener('submit', function (event) {                  // lors du c
 
     if (resultFname && resultLname && resultAddress && resultCity && resultEmail) {
 
+        const contact = {};
         contact.firstName = fNameEntered;
         contact.lastName = lastNameEntered;
         contact.address = addressEntered;
         contact.city = cityEntered;
         contact.email = emailEntered;
         
-        
         const order = {contact , products}                         // création d'un objet order, ayant les propriétés contact et products 
-        
-
 
         fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
@@ -300,7 +280,8 @@ form.addEventListener('submit', function (event) {                  // lors du c
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(order)
+            body: JSON.stringify(order),
+            
         })
             .then(function (response) { return response.json(); })
             .then(function (value) {
