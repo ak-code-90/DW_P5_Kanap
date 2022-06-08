@@ -5,16 +5,13 @@
 //On crée une fonction qui va utiliser urlSearchParams pour obtenir l'ID du produit qu'on a stocké dans l'url
 function getIdFromUrl() {
 
-    const urlString = window.location.href;                                                               //on recupère ici l'url de la page actuelle
-    const searchParams = new URLSearchParams(urlString); console.log(searchParams);
-                                                                    // on itère sur les paramètres de recherche et on retourne la valeur de l'id en index 1.
-    for (let id of searchParams) {
-        let idFromURL = id;
-        return idFromURL[1];
-    }
+                                                                    //on crée un objet 'params' qui va récupérer en quelque sorte les paramètres de l'URL
+    const params = new URLSearchParams(window.location.search); 
+                                                                    // on utilise la méthode get sur l'objet params pour récuperer la valeur du paramètre 'id'
+    return params.get('id');
 }
 
-let productId = getIdFromUrl()
+let productId = getIdFromUrl();
 
 // ici on utilise un console.log avec timeout pour verifier que ma variable globale crée plus haut contient bien la réponse voulue, 
 // si on utilise directement un console.log on a des chances de ne rien pouvoir afficher
@@ -38,25 +35,25 @@ fetch(`http://localhost:3000/api/products/${productId}`)
     .then(function (reponse) { return reponse.json(); })
     .then(function (value) {
 
-        //ajout de l'image
+        //affichage de l'image
         document.getElementsByClassName("item__img")[0].innerHTML += `<img src='${value.imageUrl}' alt="">`;
 
-        //ajout du nom du produit            
+        //affichage du nom du produit            
         document.getElementById("title").innerHTML += `${value.name}`;
 
 
-        //ajout du prix            
+        //affichage du prix            
         document.getElementById("price").innerHTML += `${value.price}`;
 
-        //ajout de la description            
+        //affichage de la description            
         document.getElementById("description").innerHTML += `${value.description}`;
 
         //récupération des éléments à afficher sur la page panier
 
-        productName = `${value.name}`;
-        productImg = `${value.imageUrl}`;
-        productAltText = `${value.altTxt}`;
-        productPrice = `${value.price}`;
+        productName = value.name;
+        productImg = value.imageUrl;
+        productAltText = value.altTxt;
+        
 
         //Ajout des options de couleur et attributs dans l'élément HTML <select>    
 
@@ -113,10 +110,23 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
 let product = {};
 
-// Lors du clique sur "Ajouter au panier"
-// --> Ajout des informations à envoyer sur le localStorage
 
-addToCart.onclick = () => {
+
+
+
+addToCart.onclick = () => {                                                                // Lors du clique sur "Ajouter au panier"
+                                                                                          
+
+    let colors = document.getElementById('colors');
+
+
+
+product.colour = colors.options[colors.selectedIndex].value;                             // Ajout des informations nécessaires pour la page panier à l'objet product
+product.qty = Number(quantity.value);      console.log(typeof product.qty);               
+product.id = productId;
+product.name = productName;
+product.img = productImg;
+product.altTxt = productAltText;
     
     if (quantity.value > 100 || quantity.value < 1) {             // gestion des exceptions
         alert('Quantité invalide !');
@@ -126,16 +136,7 @@ addToCart.onclick = () => {
     }
     else {
 
-        let colors = document.getElementById('colors');
 
-        // Remplissage de l'objet product avec les informations nécessaires pour la page panier
-        
-        product.colour = colors.options[colors.selectedIndex].value;
-        product.qty = Number(quantity.value);      console.log(typeof product.qty);               
-        product.id = productId;
-        product.name = productName;
-        product.img = productImg;
-        product.altTxt = productAltText;
 
 
         if (product.qty>1) {

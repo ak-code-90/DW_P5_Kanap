@@ -39,8 +39,11 @@ fetch('http://localhost:3000/api/products')
             // le but est de pouvoir calculer le prix de chq élément grâce aux prix par default dans l'API (ligne 57).
 
             const sectionHTML = document.getElementById('cart__items');
+
             let articleHTML = document.createElement('article');
+            
             sectionHTML.appendChild(articleHTML);
+
             articleHTML.setAttribute('class', 'cart__item');
             articleHTML.setAttribute('id', 'article');
             articleHTML.setAttribute('data-id', `${element.id}`);
@@ -68,7 +71,7 @@ fetch('http://localhost:3000/api/products')
                             </div>
             `
 
-            totalP += object.price * element.qty;               // Calcul des totaux à afficher
+            totalP += object.price * element.qty;               
             totalQ += element.qty;
         }
 
@@ -81,29 +84,29 @@ fetch('http://localhost:3000/api/products')
         let deleteHTML = document.getElementsByClassName('deleteItem');
         let search = '';
 
-        for (const e of deleteHTML) {                                          // pour chaque élément de la collection de boutons "supprimer" 
-            e.addEventListener('click', function () {                           // et à chaque clique sur "supprimer"..
+        for (const input of deleteHTML) {                                                     // pour chaque élément de la collection de boutons "supprimer" 
+            input.addEventListener('click', function () {                                     // et à chaque clique sur "supprimer"..
 
-                let closestArticleID = e.closest('#article').dataset.id;           // closestArticleID fait réfécence à l'id du parent <article> du bouton "supprimer" cliqué 
-                let closestArticleColor = e.closest('#article').dataset.color;      // closestArticleColor fait réfécence à la couleur du parent <article> du bouton "supprimer" cliqué 
-                let closestArticle = e.closest('#article');                         // closestArticle fait réfécence au parent <article>
+                let closestArticleID = input.closest('#article').dataset.id                   // closestArticleID fait réfécence à l'id du parent <article> du bouton "supprimer" cliqué 
+                let closestArticleColor = input.closest('#article').dataset.color;            // closestArticleColor fait réfécence à la couleur du parent <article> du bouton "supprimer" cliqué 
+                let closestArticle = input.closest('#article');                               // closestArticle fait réfécence au parent <article>
 
 
-                search = cart.find(element => element.id === closestArticleID && element.colour === closestArticleColor); // Si on trouve un objet dans le panier qui a le même id et la même couleur
-                if (search != undefined) {                                                                                // que le parent <article> du bouton "supprimer" qui a été cliqué
+                search = cart.find(element => element.id === closestArticleID && element.colour === closestArticleColor);           // Si on trouve un objet dans le panier qui a le même id et la même couleur
+                if (search != undefined) {                                                                                          // que le parent <article> du bouton "supprimer" qui a été cliqué
 
-                    closestArticle.remove();                                                // on supprime dans le HTML le parent <article> du bouton "supprimer" qui a été cliqué
+                    closestArticle.remove();                      // on supprime dans le HTML le parent <article> du bouton "supprimer" qui a été cliqué
 
-                    function removeArrayEl(arr, el) {                                        // on crée une fonction pour supprimer l'élément du panier 
-                        return arr.filter(item => item !== el)
+                    function removeArrayEl(arr, el) {             // on crée une fonction pour supprimer le produit du panier 
+                        return arr.filter(array => array !== el)
                     }
                 }
 
-                newCart = removeArrayEl(cart, search);                                       // newCart correspond à un nouveau panier sans l'élément qui à été supprimé                             
+                newCart = removeArrayEl(cart, search);           // newCart correspond à un nouveau panier sans l'élément qui à été supprimé                             
 
 
-                sendCart(newCart);                                                          // On envoit le nouveau panier qui remplacera le précédent sur le localStorage
-                location.reload();                                                          // // et on recharge la page pour actualiser les totaux.
+                sendCart(newCart);                                             // On envoit le nouveau panier qui remplacera le précédent sur le localStorage
+                location.reload();                                             // et on recharge la page pour actualiser les totaux.
 
             })
         }
@@ -112,38 +115,33 @@ fetch('http://localhost:3000/api/products')
         //-----------------------------------------------------------------Gestion de la modification des quantités------------------------------------------------------------------------------------------
 
 
-        let inputQtyHTML = document.querySelectorAll('.itemQuantity');           // On accède à l'input de la quantité 
+        let inputQtyHTML = document.querySelectorAll('.itemQuantity');                                                              // On accède à l'input de la quantité 
 
+        for (let input of inputQtyHTML) {                                                                                           // Pour chaque élément de la nodeList d'input "itemQuantity"
 
+            input.addEventListener('change', function () {                                                                          // On écoute un changement de quantité sur les input
 
-        for (let e of inputQtyHTML) {                                // Pour chaque élément de la nodeList d'input "itemQuantity"
-
-            e.addEventListener('change', function () {               // On écoute un changement de quantité sur les input
-
-                let closestArticleID = e.closest('#article').dataset.id;           // closestArticleID fait réfécence à l'id du parent <article> de l'input modifié
-                let closestArticleColor = e.closest('#article').dataset.color;      // closestArticleColor fait réfécence à la couleur du parent <article> de l'input modifié
-
-
+                let closestArticleID = input.closest('#article').dataset.id;                                                        // closestArticleID fait réfécence à la data id du parent <article> de l'input modifié
+                let closestArticleColor = input.closest('#article').dataset.color;                                                  // closestArticleColor fait réfécence à la data couleur du parent <article> de l'input modifié
 
                 let searchResult = cart.find(element => element.id === closestArticleID && element.colour === closestArticleColor);
-                // On réccupère un objet dans le panier qui a le même id et la même couleur que le produit sur lequel l'input a été modifié
+                                                                                                                                    // On réccupère un objet dans le panier qui a le même id et la même couleur que le produit sur lequel l'input a été modifié
 
-                if (searchResult != undefined && e.value > 0) {
+                if (searchResult != undefined && input.value > 0) {
 
-                    let eValue = parseInt(e.value);      // changement de la quantité en type 'number'    
+                    let eValue = parseInt(input.value);                                                                             // changement de la quantité en type 'number'    
 
-                    searchResult.qty = eValue;           // modification des quantités
+                    searchResult.qty = eValue;                                                                                      // modification des quantités
 
-                    function changeArrayElValue(arr, el) {               // On modifie la quantité et le prix de l'élément du panier avec les nouvelles valeures,
-                        return arr.filter(item => item === el)           // ce qui à pour effet de changer l'affichage dans le DOM
+                    function changeArrayElValue(arr, el) {                                                                          // On modifie la quantité et le prix de l'élément du panier avec les nouvelles valeures,
+                        return arr.filter(array => array === el)                                                                    // ce qui à pour effet de changer l'affichage dans le DOM
                     }
 
                     changeArrayElValue(cart, searchResult.qty);
 
 
-                    sendCart(cart);                                                               // On envoit le nouveau panier qui remplacera le précédent sur le localStorage
-                    location.reload();                                                            // et on recharge la page pour afficher le résultat.
-
+                    sendCart(cart);                                                                                                  // On envoit le nouveau panier qui remplacera le précédent sur le localStorage
+                    location.reload();                                                                                                 // et on recharge la page pour afficher le résultat.
 
                 }
 
@@ -163,14 +161,6 @@ fetch('http://localhost:3000/api/products')
 //------------------------------------------------------------Validation des données utilisateur---------------------------------------------------------------------------------------------
 
 
-function resultTestRegex(regex, inputEntered) {                                   // fonction qui retourne le resultat du test RegExpr
-    if (regex.test(inputEntered) == true) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 function displayErrorMsg(regex, inputEntered, idErrorMsg, errorMsg,) {             // fonction qui affiche un message d'erreur si le test RegExpr retourne 'False'
     if (regex.test(inputEntered) !== true) {                                          // si le test regex retourne 'False', afficher le message d'erreur
         document.getElementById(`${idErrorMsg}`).innerHTML = `${errorMsg}`;           // si le test retourne 'True', ne rien afficher
@@ -183,10 +173,6 @@ function displayErrorMsg(regex, inputEntered, idErrorMsg, errorMsg,) {          
 
 
 
-
-
-
-
 // LE PRENOM
 
 let fNameEntered = '';
@@ -194,8 +180,8 @@ let resultFname = '';
 
 firstName.addEventListener('change', function () {                                                                  // écoute d'un changement sur l'input
     fNameEntered = firstName.value;
-    resultFname = resultTestRegex(/^(?=.{2,13})[a-z é è ê ï ô '-]*$/i, fNameEntered);                              // on stock le résultat du test RegExpr
-    displayErrorMsg(/^(?=.{2,13})[a-z é è ê ï '-]*$/i, fNameEntered, 'firstNameErrorMsg', 'Prénom invalide !');    // affichage du mssg d'erreur
+    resultFname = /^(?=.{2,13}$)[a-z àâäéèêëïîôöùûüç '-]*$/i.test(fNameEntered) ;
+    displayErrorMsg(/^(?=.{2,13}$)[a-z àâäéèêëïîôöùûüç '-]*$/i, fNameEntered, 'firstNameErrorMsg', 'Prénom invalide !');    // affichage du mssg d'erreur
 })
 
 
@@ -207,8 +193,8 @@ let resultLname = '';
 lastName.addEventListener('change', function () {
 
     lastNameEntered = lastName.value;
-    resultLname = resultTestRegex(/^(?=.{2,300})[a-z é è ê ï ô '-]*$/i, lastNameEntered);
-    displayErrorMsg(/^(?=.{2,13})[a-z é è ê ï '-]*$/i, lastNameEntered, 'lastNameErrorMsg', 'Nom invalide !');
+    resultLname = /^(?=.{2,13}$)[a-z àâäéèêëïîôöùûüç '-]*$/i.test(lastNameEntered);
+    displayErrorMsg(/^(?=.{2,13}$)[a-z àâäéèêëïîôöùûüç '-]*$/i, lastNameEntered, 'lastNameErrorMsg', 'Nom invalide !');
 })
 
 
@@ -219,8 +205,8 @@ let resultAddress = '';
 
 address.addEventListener('change', function () {
     addressEntered = address.value;
-    resultAddress = resultTestRegex(/^(?=.{5,300})[a-z 0-9 â é è ê î ï ô , ° '-]*$/i, addressEntered);
-    displayErrorMsg(/^(?=.{5,300})[a-z 0-9 â é è ê î ï ô , ° '-]*$/i, addressEntered, 'addressErrorMsg', 'Adresse invalide !');
+    resultAddress = /^(?=.{5,300})[a-z 0-9 àâäéèêëïîôöùûüç , ° '-]*$/i.test(addressEntered);
+    displayErrorMsg(/^(?=.{5,300}$)[a-z 0-9 àâäéèêëïîôöùûüç , ° '-]*$/i, addressEntered, 'addressErrorMsg', 'Adresse invalide !');
 })
 
 // LA VILLE
@@ -230,8 +216,8 @@ let resultCity = '';
 
 city.addEventListener('change', function () {
     cityEntered = city.value;
-    resultCity = resultTestRegex(/^(?=.{1,46})[a-z 0-9 é è ê ï ô ° '-]*$/i, cityEntered);
-    displayErrorMsg(/^(?=.{1,46})[a-z 0-9 â é è ê ï ô ° '-]*$/i, cityEntered, 'cityErrorMsg', 'Ville invalide !');
+    resultCity = /^(?=.{1,46})[a-z àâäéèêëïîôöùûüç ° '-]*$/i.test(cityEntered);
+    displayErrorMsg(/^(?=.{1,46}$)[a-z â àâäéèêëïîôöùûüç ° '-]*$/i, cityEntered, 'cityErrorMsg', 'Ville invalide !');
 })
 
 // L'EMAIL
@@ -241,7 +227,8 @@ let resultEmail = '';
 
 email.addEventListener('change', function () {
     emailEntered = email.value;
-    resultEmail = resultTestRegex(/^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/i, emailEntered);
+    resultEmail = /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/ig.test(emailEntered) ;  
+    
     displayErrorMsg(/^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/ig, emailEntered, 'emailErrorMsg', 'Email invalide !');
 })
 
@@ -250,7 +237,7 @@ email.addEventListener('change', function () {
 
 getCart();
 
-const products = [];                                          // création d'un tableau avec les id de chaque produit du panier
+const products = [];                                                                            // création d'un tableau avec les id de chaque produit du panier
 
 for (const e of cart) {
     products.push(e.id);
@@ -258,10 +245,10 @@ for (const e of cart) {
 
 let form = document.querySelector('.cart__order__form');
 
-form.addEventListener('submit', function (event) {                  // lors du clique sur 'commander' si le test est validé, on crée l'objet contact et on l'envoi
+form.addEventListener('submit', function (event) {                                       // lors du clique sur 'commander' si le test est validé, on crée l'objet contact et on l'envoi
 
 
-    event.preventDefault();                                             // empêche le comportement par défault du bouton soi l'envoi du formulaire lors du click
+    event.preventDefault();                                                            // empêche le comportement par défault du bouton soi l'envoi du formulaire lors du click
 
     if (resultFname && resultLname && resultAddress && resultCity && resultEmail) {
 
@@ -272,7 +259,7 @@ form.addEventListener('submit', function (event) {                  // lors du c
         contact.city = cityEntered;
         contact.email = emailEntered;
         
-        const order = {contact , products}                         // création d'un objet order, ayant les propriétés contact et products 
+        const order = {contact , products}                                                    // création d'un objet order, ayant les propriétés contact et products 
 
         fetch('http://localhost:3000/api/products/order', {
             method: 'POST',

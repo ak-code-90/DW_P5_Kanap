@@ -5,10 +5,10 @@
 fetch('http://localhost:3000/api/products')
 
     .then(function (response) { return response.json(); })
-    .then(function (array) {
+    .then(function (array) { 
  
  // on obtient un tableau avec les différents produits.        
-         
+         console.table(array) ; 
 
 //Création d'une variable qui va stocker la façon dont chaque élément doit s'afficher
 
