@@ -5,9 +5,9 @@
 //On crée une fonction qui va utiliser urlSearchParams pour obtenir l'ID du produit qu'on a stocké dans l'url
 function getIdFromUrl() {
 
-                                                                    //on crée un objet 'params' qui va récupérer en quelque sorte les paramètres de l'URL
-    const params = new URLSearchParams(window.location.search); 
-                                                                    // on utilise la méthode get sur l'objet params pour récuperer la valeur du paramètre 'id'
+    //on crée un objet 'params' qui va récupérer en quelque sorte les paramètres de l'URL
+    const params = new URLSearchParams(window.location.search);
+    // on utilise la méthode get sur l'objet params pour récuperer la valeur du paramètre 'id'
     return params.get('id');
 }
 
@@ -36,24 +36,22 @@ fetch(`http://localhost:3000/api/products/${productId}`)
     .then(function (value) {
 
         //affichage de l'image
-        document.getElementsByClassName("item__img")[0].innerHTML += `<img src='${value.imageUrl}' alt="">`;
+        document.getElementsByClassName("item__img")[0].innerHTML = `<img src='${value.imageUrl}' alt="">`;
 
         //affichage du nom du produit            
-        document.getElementById("title").innerHTML += `${value.name}`;
+        document.getElementById("title").innerText = value.name;
 
 
         //affichage du prix            
-        document.getElementById("price").innerHTML += `${value.price}`;
+        document.getElementById("price").innerText = value.price;
 
         //affichage de la description            
-        document.getElementById("description").innerHTML += `${value.description}`;
+        document.getElementById("description").innerText = value.description;
 
         //récupération des éléments à afficher sur la page panier
 
-        productName = value.name;
-        productImg = value.imageUrl;
-        productAltText = value.altTxt;
-        
+
+
 
         //Ajout des options de couleur et attributs dans l'élément HTML <select>    
 
@@ -62,13 +60,13 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
         let newColour1 = document.createElement("option");
         select.appendChild(newColour1);
-        newColour1.setAttribute('value', `${value.colors[0]}`);
-        newColour1.innerHTML = `${value.colors[0]}`;
+        newColour1.setAttribute('value', value.colors[0]);
+        newColour1.innerText = value.colors[0];
 
         let newColour2 = document.createElement("option");
         select.appendChild(newColour2);
-        newColour2.setAttribute('value', `${value.colors[1]}`);
-        newColour2.innerHTML = `${value.colors[1]}`;
+        newColour2.setAttribute('value', value.colors[1]);
+        newColour2.innerText = value.colors[1];
 
 
         //Algoritme qui permet d'afficher autant de choix de couleurs qu'il y a de couleurs dans le tableau de l'objet
@@ -77,8 +75,8 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
                 let newColour3 = document.createElement("option");
                 select.appendChild(newColour3);
-                newColour3.setAttribute('value', `${value.colors[2]}`);
-                newColour3.innerHTML = `${value.colors[2]}`;
+                newColour3.setAttribute('value', value.colors[2]);
+                newColour3.innerText = value.colors[2];
 
                 break;
 
@@ -86,13 +84,13 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 
                 let newColour3bis = document.createElement("option");
                 select.appendChild(newColour3bis);
-                newColour3bis.setAttribute('value', `${value.colors[2]}`);
-                newColour3bis.innerHTML = `${value.colors[2]}`;
+                newColour3bis.setAttribute('value', value.colors[2]);
+                newColour3bis.innerText = value.colors[2];
 
                 let newColour4 = document.createElement("option");
                 select.appendChild(newColour4);
-                newColour4.setAttribute(`value`, `${value.colors[3]}`);
-                newColour4.innerHTML = `${value.colors[3]}`;
+                newColour4.setAttribute(`value`, value.colors[3]);
+                newColour4.innerText = value.colors[3];
 
             default:
                 break;
@@ -109,25 +107,22 @@ fetch(`http://localhost:3000/api/products/${productId}`)
 // création d'un objet 'product' à envoyer sur le localStorage
 
 let product = {};
-
+let addToCart = document.getElementById('addToCart');
 
 
 
 
 addToCart.onclick = () => {                                                                // Lors du clique sur "Ajouter au panier"
-                                                                                          
+    console.log(2);
 
     let colors = document.getElementById('colors');
 
 
 
-product.colour = colors.options[colors.selectedIndex].value;                             // Ajout des informations nécessaires pour la page panier à l'objet product
-product.qty = Number(quantity.value);      console.log(typeof product.qty);               
-product.id = productId;
-product.name = productName;
-product.img = productImg;
-product.altTxt = productAltText;
-    
+    product.colour = colors.options[colors.selectedIndex].value;                             // Ajout des informations nécessaires pour la page panier à l'objet product
+    product.qty = Number(quantity.value); console.log(typeof product.qty);
+    product.id = productId;
+
     if (quantity.value > 100 || quantity.value < 1) {             // gestion des exceptions
         alert('Quantité invalide !');
     }
@@ -139,10 +134,10 @@ product.altTxt = productAltText;
 
 
 
-        if (product.qty>1) {
+        if (product.qty > 1) {
             alert('Vos articles ont bien été ajoutés au panier')    // Affichage d'un message de confirmation d'ajout au panier pertinent selon la qté
         }
-        else { alert('Votre article a bien été ajouté au panier')}
+        else { alert('Votre article a bien été ajouté au panier') }
 
 
         // Création d'une fonction pour récupérer le panier depuis localStorage
@@ -177,10 +172,10 @@ product.altTxt = productAltText;
             let search = cart.find(element => element.id === product.id && element.colour === product.colour)
             if (search != undefined) {            // Si on trouve un objet dans le panier qui a le même id et la même couleur
 
-                x = parseInt(search.qty);        
+                x = parseInt(search.qty);
                 y = parseInt(product.qty);
 
-                search.qty = x + y ;                                        // --> On actualise sa quantité               
+                search.qty = x + y;                                        // --> On actualise sa quantité               
                 sendCart(cart);
 
             }
@@ -190,8 +185,8 @@ product.altTxt = productAltText;
             }
         }
 
-        addToCart() ;
-        
+        addToCart();
+
     }
-    
+
 }

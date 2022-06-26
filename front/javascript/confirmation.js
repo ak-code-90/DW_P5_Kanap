@@ -1,13 +1,13 @@
 
 
-function getIdFromUrl() {
+getIdFromUrl = () => {
 
-const params = new URLSearchParams(window.location.search); 
+    const params = new URLSearchParams(window.location.search);
 
-return params.get('order');
+    return params.get('order');
 }
 
 
-let orderID = getIdFromUrl(); 
+let orderID = getIdFromUrl();
 
-orderId.innerHTML = `${orderID}`;
+orderId.innerText = orderID;

@@ -3,7 +3,7 @@ let cart;
 
 function getCart() {
     cartString = localStorage.getItem('cart');
-    cart = JSON.parse(cartString);  
+    cart = JSON.parse(cartString);
 }
 
 function sendCart(array) {
@@ -36,12 +36,12 @@ fetch('http://localhost:3000/api/products')
             object = apiArray.find(obj => obj._id === element.id);
 
             // récupération dans l'API d'un objet dont l'ID matche avec l'ID de l'élément du panier, 
-            // le but est de pouvoir calculer le prix de chq élément grâce aux prix par default dans l'API (ligne 57).
+            // le but est de pouvoir calculer le prix de chq élément grâce aux prix par default dans l'API (ligne 60).
 
             const sectionHTML = document.getElementById('cart__items');
 
             let articleHTML = document.createElement('article');
-            
+
             sectionHTML.appendChild(articleHTML);
 
             articleHTML.setAttribute('class', 'cart__item');
@@ -51,11 +51,11 @@ fetch('http://localhost:3000/api/products')
 
             articleHTML.innerHTML = `
                             <div class="cart__item__img">
-                                <img src='${element.img}' alt="${element.altTxt}">
+                                <img src='${object.imageUrl}' alt="${object.altTxt}">
                             </div>
                             <div class="cart__item__content">
                                 <div class="cart__item__content__description">
-                                        <h2>${element.name}</h2>
+                                        <h2>${object.name}</h2>
                                         <p>Couleur : ${element.colour}</p>
                                         <p id="price">Prix : ${(object.price * element.qty)} €</p>                        
                                 </div>
@@ -71,12 +71,12 @@ fetch('http://localhost:3000/api/products')
                             </div>
             `
 
-            totalP += object.price * element.qty;               
+            totalP += object.price * element.qty;
             totalQ += element.qty;
         }
 
-        totalQuantity.innerHTML = `${totalQ}`;                            // affichage des totaux dans le DOM
-        totalPrice.innerHTML = `${totalP}`;
+        totalQuantity.innerText = totalQ;                            // affichage des totaux dans le DOM
+        totalPrice.innerText = totalP;
 
         //-------------------------------------------------------------------Gestion de la suppresion d'un produit------------------------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ fetch('http://localhost:3000/api/products')
                 let closestArticleColor = input.closest('#article').dataset.color;                                                  // closestArticleColor fait réfécence à la data couleur du parent <article> de l'input modifié
 
                 let searchResult = cart.find(element => element.id === closestArticleID && element.colour === closestArticleColor);
-                                                                                                                                    // On réccupère un objet dans le panier qui a le même id et la même couleur que le produit sur lequel l'input a été modifié
+                // On réccupère un objet dans le panier qui a le même id et la même couleur que le produit sur lequel l'input a été modifié
 
                 if (searchResult != undefined && input.value > 0) {
 
@@ -148,8 +148,8 @@ fetch('http://localhost:3000/api/products')
             })
         }
 
-      
-        
+
+
     }
     )
 
@@ -163,9 +163,9 @@ fetch('http://localhost:3000/api/products')
 
 function displayErrorMsg(regex, inputEntered, idErrorMsg, errorMsg,) {             // fonction qui affiche un message d'erreur si le test RegExpr retourne 'False'
     if (regex.test(inputEntered) !== true) {                                          // si le test regex retourne 'False', afficher le message d'erreur
-        document.getElementById(`${idErrorMsg}`).innerHTML = `${errorMsg}`;           // si le test retourne 'True', ne rien afficher
+        document.getElementById(idErrorMsg).innerText = errorMsg;           // si le test retourne 'True', ne rien afficher
 
-    } else { document.getElementById(`${idErrorMsg}`).innerHTML = ``; }
+    } else { document.getElementById(idErrorMsg).innerText = ``; }
 
 }
 
@@ -180,7 +180,7 @@ let resultFname = '';
 
 firstName.addEventListener('change', function () {                                                                  // écoute d'un changement sur l'input
     fNameEntered = firstName.value;
-    resultFname = /^(?=.{2,13}$)[a-z àâäéèêëïîôöùûüç '-]*$/i.test(fNameEntered) ;
+    resultFname = /^(?=.{2,13}$)[a-z àâäéèêëïîôöùûüç '-]*$/i.test(fNameEntered);
     displayErrorMsg(/^(?=.{2,13}$)[a-z àâäéèêëïîôöùûüç '-]*$/i, fNameEntered, 'firstNameErrorMsg', 'Prénom invalide !');    // affichage du mssg d'erreur
 })
 
@@ -227,8 +227,8 @@ let resultEmail = '';
 
 email.addEventListener('change', function () {
     emailEntered = email.value;
-    resultEmail = /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/ig.test(emailEntered) ;  
-    
+    resultEmail = /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/ig.test(emailEntered);
+
     displayErrorMsg(/^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/ig, emailEntered, 'emailErrorMsg', 'Email invalide !');
 })
 
@@ -237,7 +237,7 @@ email.addEventListener('change', function () {
 
 getCart();
 
-const products = [];                                                                            // création d'un tableau avec les id de chaque produit du panier
+const products = [];                                                                   // création d'un tableau avec les id de chaque produit du panier
 
 for (const e of cart) {
     products.push(e.id);
@@ -245,7 +245,7 @@ for (const e of cart) {
 
 let form = document.querySelector('.cart__order__form');
 
-form.addEventListener('submit', function (event) {                                       // lors du clique sur 'commander' si le test est validé, on crée l'objet contact et on l'envoi
+form.addEventListener('submit', function (event) {                                     // lors du clique sur 'commander' si le test est validé, on crée l'objet contact et on l'envoi
 
 
     event.preventDefault();                                                            // empêche le comportement par défault du bouton soi l'envoi du formulaire lors du click
@@ -258,8 +258,8 @@ form.addEventListener('submit', function (event) {                              
         contact.address = addressEntered;
         contact.city = cityEntered;
         contact.email = emailEntered;
-        
-        const order = {contact , products}                                                    // création d'un objet order, ayant les propriétés contact et products 
+
+        const order = { contact, products }                                                    // création d'un objet order, ayant les propriétés contact et products 
 
         fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
@@ -268,19 +268,19 @@ form.addEventListener('submit', function (event) {                              
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(order),
-            
+
         })
             .then(function (response) { return response.json(); })
             .then(function (value) {
-                
-                document.location.href= `confirmation.html?order=${value.orderId}`
+
+                document.location.href = `confirmation.html?order=${value.orderId}`
             })
             .catch(function (error) {
                 console.log(error);
             })
 
-    }
-})
+    } 1
 
+})
 
 

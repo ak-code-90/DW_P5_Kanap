@@ -1,25 +1,25 @@
- // Etape 3 - Inserer les produits dans la page d'accueil 
+// - Inserer les produits dans la page d'accueil 
 
 // Récupération des produits en utilisant la méthode FETCH, on utilise .THEN pour attendre et recupérer une reponse en JSON, 
 // 
 fetch('http://localhost:3000/api/products')
 
-    .then(function (response) { return response.json(); })
-    .then(function (array) { 
- 
- // on obtient un tableau avec les différents produits.        
-         console.table(array) ; 
+        .then(function (response) { return response.json(); })
+        .then(function (array) {
 
-//Création d'une variable qui va stocker la façon dont chaque élément doit s'afficher
+                // on obtient un tableau avec les différents produits.        
 
-        let displayProducts = '';
 
-//Création d'une boucle pour ajouter chaque produits.
-//On utilise des liens dans lesquels on rajoute l'identifiant de chaque produit en paramètre de l'url 
+                //Création d'une variable qui va stocker la façon dont chaque élément doit s'afficher
 
-        for (let products of array) {
+                let displayProducts = '';
 
-            displayProducts += `
+                //Création d'une boucle pour ajouter chaque produits.
+                //On utilise des liens dans lesquels on rajoute l'identifiant de chaque produit en paramètre de l'url 
+
+                for (let products of array) {
+
+                        displayProducts += `
 
                                     <a href="product.html?id=${products._id}"> 
                                     <div style=\'list-style-type:none \'>
@@ -30,24 +30,17 @@ fetch('http://localhost:3000/api/products')
                                        </div>
                                     </div>
                                     </a>
-                                `;                                                                 
-        };
+                                `;
+                };
 
-//On modifie le DOM pour afficher tous les produits
+                //On modifie le DOM pour afficher tous les produits
 
-        let items = document.getElementById('items')
-        items.innerHTML = displayProducts;
-        
-    })
+                let items = document.getElementById('items')
+                items.innerHTML = displayProducts;
 
-    .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
+        })
 
-
-
-
-
-
-  
+        .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
 
 
 
@@ -55,4 +48,10 @@ fetch('http://localhost:3000/api/products')
 
 
 
-  
+
+
+
+
+
+
+
