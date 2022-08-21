@@ -40,7 +40,7 @@ fetch('http://localhost:3000/api/products')
 
         })
 
-        .catch(function (erreur) { console.log(` Erreur : ${erreur}`); })
+        .catch(err => console.log(err))
 
 
 
