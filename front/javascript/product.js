@@ -29,7 +29,7 @@ let productAltText = '';
 let productPrice = '';
 
 //On utilise fetch avec l'id en paramètre pour récupérer
-fetch(`http://localhost:3000/api/products/${productId}`)
+fetch(`https://dw-p5-kanap.vercel.app/api/products/${productId}`)
 
 
     .then(function (reponse) { return reponse.json(); })

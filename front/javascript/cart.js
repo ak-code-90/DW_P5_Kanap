@@ -13,7 +13,7 @@ function sendCart(array) {
 
 // Récupération du tableau de l'API
 
-fetch('http://localhost:3000/api/products')
+fetch('https://dw-p5-kanap.vercel.app/api/products')
     .then(function (response) { return response.json(); })
     .then(function (array) {
         let apiArray = array
@@ -261,7 +261,7 @@ form.addEventListener('submit', function (event) {                              
 
         const order = { contact, products }                                                    // création d'un objet order, ayant les propriétés contact et products 
 
-        fetch('http://localhost:3000/api/products/order', {
+        fetch('https://dw-p5-kanap.vercel.app/api/products/order', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
