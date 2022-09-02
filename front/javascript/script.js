@@ -2,7 +2,7 @@
 
 // Récupération des produits en utilisant la méthode FETCH, on utilise .THEN pour attendre et recupérer une reponse en JSON, 
 // 
-fetch('https://dw-p5-kanap.vercel.app//api/products')
+fetch('https://dw-p5-kanap.vercel.app/api/products')
 
         .then(function (response) { return response.json(); })
         .then(function (array) {
