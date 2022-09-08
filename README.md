@@ -1,7 +1,7 @@
 
 ## Auteur
 
-👤 &nbsp; **Guillaume AUBIN**
+👤 &nbsp; **Kevin Adda**
 
 * GitHub: [@Kevin Adda](https://github.com/ak-code-90 "Cliquez pour voir mes projets")
 * LinkedIn: [@Kevin Adda](https://www.linkedin.com/in/kevin-adda/ "Visitez mon profil LinkedIn")
@@ -21,8 +21,7 @@ Réalisation de la partie front-end Javascript du site e-commerce Kanap (marque 
 * Valider des données issues de sources externes
 * Créer un plan de test pour une application
 * Interagir avec un web service avec JavaScript
-* Respecter les [spécifications fonctionnelles et techniques](https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/DWJ_FR_P5/DW+P5+-+Specifications+fonctionnelles.pdf "voir les spécifications")
-
+* Respecter les [spécifications fonctionnelles et techniques] (voir dossier ressources)
 ***
 
 Spécifications fonctionnelles
