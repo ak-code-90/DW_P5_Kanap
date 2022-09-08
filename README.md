@@ -36,7 +36,7 @@ L’application web est composée de 4 pages dont les fonctionnalités suivantes
  * Une page “confirmation” : Un message de confirmation de commande, remerciant l'utilisateur pour sa commande, et indiquant l'identifiant de commande envoyé par l’API.
 
 
-### Technologies utilisées :  
+### Technologies utilisées 
 
 ### Kanap Back-End
 ![javascript](https://img.shields.io/badge/Javascript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
