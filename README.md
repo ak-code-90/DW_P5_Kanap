@@ -11,7 +11,7 @@
 
 ### Créer des interfaces dynamiques
 
-Le site hébergé sur GitHub : [Kanap](https://ak-code-90.github.io/DW_P5_Kanap/)
+Le site hébergé grâce à github et vercel : [https://ak-code-90.github.io/DW_P5_Kanap](https://ak-code-90.github.io/DW_P5_Kanap/)
 
 Réalisation de la partie front-end Javascript du site e-commerce Kanap (marque de canapés)
 
@@ -38,12 +38,12 @@ L’application web est composée de 4 pages dont les fonctionnalités suivantes
 
 ## Technologies utilisées :  
 
-## Kanap Back-End
+### Kanap Back-End
 ![javascript](https://img.shields.io/badge/Javascript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
 ![NodeJs](https://img.shields.io/badge/NodeJs-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-EEEEEE?style=for-the-badge&logo=express&logoColor=black)
 
-## Kanap Front-End
+### Kanap Front-End
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![javascript](https://img.shields.io/badge/Javascript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
