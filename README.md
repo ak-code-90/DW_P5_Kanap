@@ -15,7 +15,7 @@ Le site hébergé grâce à github et vercel : [https://ak-code-90.github.io/DW_
 
 Réalisation de la partie front-end Javascript du site e-commerce Kanap (marque de canapés)
 
-##### Compétences
+### Compétences
 
 * Gérer des événements JavaScript
 * Valider des données issues de sources externes
